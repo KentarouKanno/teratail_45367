@@ -10,18 +10,27 @@ import UIKit
 
 
 protocol CustomCellDelegate: class {
-    func pushCellButton(indexPath: NSIndexPath)
+    func pushCellButton(cell: CustomCell)
 }
 
 class CustomCell: UITableViewCell {
-
+    
+    @IBOutlet weak var label: UILabel!
+    @IBOutlet weak var cellButton: UIButton!
     weak var delegate: CustomCellDelegate!
     var cellIndexPath: NSIndexPath!
     
-    @IBOutlet weak var cellButton: UIButton!
+    
+    var data: DataModel! {
+        didSet {
+            self.label.text = data.text
+            self.cellButton.hidden = !data.isShowButton
+        }
+    }
     
     @IBAction func pushCellButton(sender: UIButton) {
         // ボタン押下時のイベント
-        delegate?.pushCellButton(cellIndexPath)
+        data.isOpenCell = !data.isOpenCell
+        delegate?.pushCellButton(self)
     }
 }
